@@ -27,13 +27,14 @@ export function nowKST(now?: Date): KstNow {
 }
 
 // ?now=2026-07-08T15:00 오버라이드 — pre-hash(search)와 hash 내부 ?를 모두 지원
+// (URLSearchParams가 이미 디코드하므로 decodeURIComponent를 다시 걸지 않는다 — 이중 디코드는 URIError)
 export function getNowOverride(): Date | undefined {
   const pick = (qs: string) => new URLSearchParams(qs).get('now');
   const raw =
     pick(window.location.search) ??
     (window.location.hash.includes('?') ? pick(window.location.hash.slice(window.location.hash.indexOf('?'))) : null);
   if (!raw) return undefined;
-  const d = new Date(decodeURIComponent(raw));
+  const d = new Date(raw);
   return isNaN(d.getTime()) ? undefined : d;
 }
 
@@ -67,10 +68,16 @@ export function getSessionStatus(t: KstNow): SessionPhase {
     return { phase: 'during', current, minutesLeft: toMinutes(current.end) - t.minutes };
   }
 
-  const next = SESSIONS.find(
+  const upcoming = SESSIONS.filter(
     (s) => s.date > t.date || (s.date === t.date && toMinutes(s.start) > t.minutes),
   );
-  if (!next) return { phase: 'after' };
+  if (upcoming.length === 0) return { phase: 'after' };
+  // 동시 시작(ORAL1·PS1)이면 포스터 세션을 '다음'으로 안내 (docs/01 §4와 일관)
+  const first = upcoming[0];
+  const sameSlot = upcoming.filter(
+    (s) => s.date === first.date && s.start === first.start,
+  );
+  const next = sameSlot.find((s) => s.id !== 'ORAL1') ?? first;
   const sameDay = next.date === t.date;
   return {
     phase: 'between',

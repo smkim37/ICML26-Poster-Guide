@@ -73,7 +73,11 @@ export default function StatsPage() {
         </h2>
         <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           <StatTile label="방문" value={my.visited} sub={`/${PAPERS.length}`} />
-          <StatTile label="핵심 방문" value={my.coreVisited} sub="/30" />
+          <StatTile
+            label="핵심 방문"
+            value={my.coreVisited}
+            sub={`/${PAPERS.filter((p) => p.tier === 'core').length}`}
+          />
           <StatTile label="별표" value={my.starred} />
           <StatTile label="메모" value={my.memos} />
         </div>

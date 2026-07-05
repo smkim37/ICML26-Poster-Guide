@@ -10,6 +10,7 @@ import { PAPERS } from '../data/posters';
 import { DAYS, SESSIONS, type DayTabId } from '../data/sessions';
 import { useUserData } from '../hooks/useUserData';
 import { countActiveFilters, EMPTY_FILTERS, filterPapers, type Filters } from '../lib/filter';
+import { getNowOverride, nowKST } from '../lib/time';
 import type { DayId, Paper, SessionId, Tier } from '../types';
 
 const DAY_KEY = 'icml26.day';
@@ -19,8 +20,8 @@ const TIER_ORDER: Record<Tier, number> = { core: 0, related: 1, reference: 2 };
 function defaultDay(): DayTabId {
   const saved = sessionStorage.getItem(DAY_KEY);
   if (saved && DAYS.some((d) => d.id === saved)) return saved as DayTabId;
-  // 컨퍼런스 기간(KST 기준 오늘이 7/7–7/9)이면 해당 요일 탭
-  const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Seoul' }).format(new Date());
+  // 컨퍼런스 기간(KST 기준 오늘이 7/7–7/9)이면 해당 요일 탭 — ?now= 오버라이드 존중
+  const today = nowKST(getNowOverride()).date;
   return (DAYS.find((d) => d.date === today)?.id ?? 'tue') as DayTabId;
 }
 
@@ -37,11 +38,15 @@ export default function ListPage() {
   const [searchAllDays, setSearchAllDays] = useState(false);
   const { get } = useUserData();
 
-  // 상세에서 뒤로 왔을 때 스크롤 복원 (unmount 시 저장)
+  // 상세에서 뒤로 왔을 때 스크롤 복원.
+  // 저장은 스크롤 중 상시 기록 — unmount cleanup에서 저장하면 그 시점에 DOM이 이미
+  // 다음 페이지로 교체되어 scrollY가 새 문서 높이로 클램프된 값이 저장된다 (리뷰 확정 이슈).
   useEffect(() => {
     const saved = sessionStorage.getItem(SCROLL_KEY);
     if (saved) requestAnimationFrame(() => window.scrollTo(0, Number(saved)));
-    return () => sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    const onScroll = () => sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
   const selectDay = (d: DayTabId) => {
@@ -160,7 +165,7 @@ export default function ListPage() {
       <FilterSheet
         open={sheetOpen}
         filters={filters}
-        resultCount={dayPapers.length}
+        resultCount={globalResults ? globalResults.length : dayPapers.length}
         onChange={setFilters}
         onClose={() => setSheetOpen(false)}
       />

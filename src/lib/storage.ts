@@ -48,11 +48,25 @@ export function downloadBackup(d: UserData): void {
   const now = new Date();
   const pad = (n: number) => String(n).padStart(2, '0');
   const name = `icml26-backup-${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}-${pad(now.getHours())}${pad(now.getMinutes())}.json`;
-  const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
+  const json = JSON.stringify(d, null, 2);
+
+  // iOS 홈스크린(standalone)에서는 앵커 다운로드가 동작하지 않으므로 공유 시트 우선
+  // (사용자 제스처 컨텍스트 안에서 호출됨 — SettingsPage 버튼 onClick)
+  const file = new File([json], name, { type: 'application/json' });
+  if (typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] })) {
+    navigator.share({ files: [file], title: name }).catch(() => {
+      // 사용자가 시트를 닫은 경우 등 — 무시
+    });
+    return;
+  }
+
+  const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
   const a = document.createElement('a');
   a.href = url;
   a.download = name;
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  a.remove();
+  // 즉시 revoke하면 WebKit에서 다운로드가 취소될 수 있음 — 지연 해제
+  window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
 }

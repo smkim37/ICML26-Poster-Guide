@@ -6,12 +6,19 @@ export default function AppHeader() {
   const navigate = useNavigate();
   const isDetail = pathname.startsWith('/paper/');
 
+  // 딥링크로 상세에 직접 진입하면 히스토리가 없어 navigate(-1)이 무동작 → 홈으로 폴백
+  const goBack = () => {
+    const idx = (window.history.state as { idx?: number } | null)?.idx ?? 0;
+    if (idx > 0) navigate(-1);
+    else navigate('/', { replace: true });
+  };
+
   return (
     <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white/80 pt-[env(safe-area-inset-top)] backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/80">
       <div className="mx-auto flex h-12 w-full max-w-[640px] items-center gap-2.5 px-4">
         {isDetail ? (
           <button
-            onClick={() => navigate(-1)}
+            onClick={goBack}
             aria-label="뒤로"
             className="-ml-3 flex h-11 w-11 items-center justify-center text-zinc-600 dark:text-zinc-300"
           >

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { EMPTY_FILTERS, type Filters } from '../lib/filter';
 import type { PresType, Tier } from '../types';
 
@@ -30,7 +31,7 @@ function Chip({
   return (
     <button
       onClick={onClick}
-      className={`h-9 rounded-full px-3.5 text-[13px] font-medium transition-colors duration-150 ${
+      className={`h-11 rounded-full px-4 text-[13px] font-medium transition-colors duration-150 ${
         active
           ? 'bg-accent text-white dark:bg-accent-dark dark:text-zinc-900'
           : 'bg-zinc-100 text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300'
@@ -63,6 +64,16 @@ export default function FilterSheet({
   onChange: (f: Filters) => void;
   onClose: () => void;
 }) {
+  // 시트 열림 동안 배경 스크롤 락
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
+
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-30">
@@ -72,7 +83,7 @@ export default function FilterSheet({
         className="absolute inset-0 animate-fadein bg-black/40"
       />
       <div className="absolute inset-x-0 bottom-0 animate-slideup rounded-t-2xl bg-white pb-[env(safe-area-inset-bottom)] dark:bg-zinc-900">
-        <div className="mx-auto w-full max-w-[640px] px-5 pb-4 pt-3">
+        <div className="mx-auto max-h-[80dvh] w-full max-w-[640px] overflow-y-auto overscroll-contain px-5 pb-4 pt-3">
           <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-zinc-300 dark:bg-zinc-700" />
           <div className="space-y-4">
             <Section title="구분">
@@ -128,7 +139,7 @@ export default function FilterSheet({
           <div className="mt-5 flex items-center gap-3">
             <button
               onClick={() => onChange(EMPTY_FILTERS)}
-              className="shrink-0 px-2 text-[14px] font-medium text-zinc-500"
+              className="flex h-11 shrink-0 items-center px-3 text-[14px] font-medium text-zinc-500"
             >
               초기화
             </button>

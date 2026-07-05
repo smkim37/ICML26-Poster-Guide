@@ -28,13 +28,13 @@ export default function SearchBar({
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="제목·저자·소속·소개 검색"
-          className="h-10 w-full rounded-[10px] border border-zinc-200 bg-white pl-10 pr-9 text-[14px] outline-none placeholder:text-zinc-400 focus:border-accent dark:border-zinc-800 dark:bg-zinc-900 dark:focus:border-accent-dark [&::-webkit-search-cancel-button]:hidden"
+          className="h-11 w-full rounded-[10px] border border-zinc-200 bg-white pl-10 pr-11 text-[14px] outline-none placeholder:text-zinc-400 focus:border-accent dark:border-zinc-800 dark:bg-zinc-900 dark:focus:border-accent-dark [&::-webkit-search-cancel-button]:hidden"
         />
         {value && (
           <button
             onClick={() => setValue('')}
             aria-label="지우기"
-            className="absolute right-0 top-0 flex h-10 w-9 items-center justify-center text-zinc-400"
+            className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center text-zinc-400"
           >
             <XIcon className="h-4 w-4" />
           </button>
@@ -43,7 +43,7 @@ export default function SearchBar({
       <button
         onClick={onOpenFilter}
         aria-label="필터"
-        className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] border border-zinc-200 bg-white text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+        className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-[10px] border border-zinc-200 bg-white text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
       >
         <FilterIcon className="h-5 w-5" />
         {activeFilterCount > 0 && (

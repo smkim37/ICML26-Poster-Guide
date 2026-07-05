@@ -6,8 +6,8 @@ export default function MemoEditor({ paperId }: { paperId: string }) {
   const [value, setValue] = useState(() => get(paperId).memo ?? '');
   const [saved, setSaved] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
-  const latest = useRef({ paperId, value });
-  latest.current = { paperId, value };
+  const latest = useRef({ paperId, value, stored: get(paperId).memo ?? '' });
+  latest.current = { paperId, value, stored: get(paperId).memo ?? '' };
 
   // 다른 논문으로 이동 시 값 동기화
   useEffect(() => {
@@ -16,9 +16,13 @@ export default function MemoEditor({ paperId }: { paperId: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paperId]);
 
-  // blur 없이 이탈(스와이프백 등)해도 저장 유실 방지
+  // blur 없이 이탈(스와이프백 등)해도 저장 유실 방지 — 실제로 바뀐 경우에만 기록
+  // (무조건 호출하면 열람만 해도 updatedAt이 갱신되고 저장된 메모가 임의로 trim됨)
   useEffect(
-    () => () => setMemo(latest.current.paperId, latest.current.value.trim()),
+    () => () => {
+      const { paperId: id, value: v, stored } = latest.current;
+      if (v.trim() !== stored) setMemo(id, v.trim());
+    },
     [setMemo],
   );
 
