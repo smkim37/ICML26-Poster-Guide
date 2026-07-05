@@ -74,16 +74,16 @@
 
 ## Phase 5 — 다크모드 + 설정 + 반응형 폴리시
 
-- [ ] `useTheme`(light/dark/system, `icml26.theme` 키) + index.html 인라인 no-flash 스크립트
-- [ ] SettingsPage: 테마 토글, 백업 내보내기/가져오기(replace-with-confirm), 데이터 초기화, 앱 정보
-- [ ] safe-area 전수 점검 (`pt-[env(safe-area-inset-top)]`, `pb-[env(safe-area-inset-bottom)]`, `min-h-dvh`)
-- [ ] 반응형: 리스트 max-w 640px 중앙 정렬, 통계 ≥768px 2컬럼, 1280px 데스크톱 점검
+- [x] `useTheme`(light/dark/system, `icml26.theme` 키) + index.html 인라인 no-flash 스크립트
+- [x] SettingsPage: 테마 토글, 백업 내보내기/가져오기(replace-with-confirm), 데이터 초기화, 앱 정보
+- [x] safe-area 전수 점검 (`pt-[env(safe-area-inset-top)]`, `pb-[env(safe-area-inset-bottom)]`, `min-h-dvh`)
+- [x] 반응형: 리스트 max-w 640px 중앙 정렬, 통계 ≥768px 2컬럼, 1280px 데스크톱 점검
 
 **Acceptance**
-- [ ] 테마 전환·유지, 새로고침 시 흰 화면 플래시 없음
-- [ ] 내보낸 JSON을 초기화된 브라우저에 가져오기 → 모든 마크 복원
-- [ ] 393px 뷰포트에서 가로 스크롤 0, 홈 인디케이터와 TabBar 겹침 없음
-- [ ] 라이트/다크 모두에서 대비 점검 (본문 대비 ≥4.5:1)
+- [x] 테마 전환·유지, 새로고침 시 흰 화면 플래시 없음
+- [x] 내보낸 JSON을 초기화된 브라우저에 가져오기 → 모든 마크 복원
+- [x] 393px 뷰포트에서 가로 스크롤 0, 홈 인디케이터와 TabBar 겹침 없음
+- [x] 라이트/다크 모두에서 대비 점검 (본문 대비 ≥4.5:1)
 
 ## Phase 6 — PWA + 최종 QA
 
@@ -109,5 +109,5 @@
 | 2. 리스트+상세 | ✅ 완료 | (this) |
 | 3. 검색·필터·유저데이터 | ✅ 완료 | |
 | 4. 시간·일정·통계 | ✅ 완료 | |
-| 5. 다크모드·설정·반응형 | ⬜ | |
+| 5. 다크모드·설정·반응형 | ✅ 완료 | |
 | 6. PWA·QA | ⬜ | |
