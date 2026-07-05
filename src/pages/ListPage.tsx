@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import DayTabs from '../components/DayTabs';
 import EmptyState from '../components/EmptyState';
 import FilterSheet from '../components/FilterSheet';
+import NowBanner from '../components/NowBanner';
 import PosterCard from '../components/PosterCard';
 import SearchBar from '../components/SearchBar';
 import SessionGroup from '../components/SessionGroup';
@@ -9,7 +10,7 @@ import { PAPERS } from '../data/posters';
 import { DAYS, SESSIONS, type DayTabId } from '../data/sessions';
 import { useUserData } from '../hooks/useUserData';
 import { countActiveFilters, EMPTY_FILTERS, filterPapers, type Filters } from '../lib/filter';
-import type { Paper, Tier } from '../types';
+import type { DayId, Paper, SessionId, Tier } from '../types';
 
 const DAY_KEY = 'icml26.day';
 const SCROLL_KEY = 'icml26.scrollY';
@@ -48,6 +49,16 @@ export default function ListPage() {
     sessionStorage.setItem(DAY_KEY, d);
     sessionStorage.removeItem(SCROLL_KEY);
     window.scrollTo(0, 0);
+  };
+
+  // NowBanner 탭 → 해당 일자 탭 전환 + 세션으로 스크롤 (docs/01 §4)
+  const jumpToSession = (d: DayId, sessionId: SessionId) => {
+    selectDay(d);
+    window.setTimeout(() => {
+      document
+        .getElementById(`session-${sessionId}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 60);
   };
 
   const applyFilters = useCallback(
@@ -93,6 +104,7 @@ export default function ListPage() {
   return (
     <div>
       <DayTabs value={day} counts={counts} onChange={selectDay} />
+      <NowBanner onJump={jumpToSession} />
       <SearchBar
         onQuery={setQuery}
         activeFilterCount={countActiveFilters(filters)}

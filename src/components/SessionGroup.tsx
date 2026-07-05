@@ -16,7 +16,7 @@ export default function SessionGroup({
   const visited = papers.filter((p) => get(p.id).visited).length;
 
   return (
-    <section className="mb-6" id={`session-${session.id}`}>
+    <section className="mb-6 scroll-mt-[calc(7.5rem+env(safe-area-inset-top))]" id={`session-${session.id}`}>
       <header className="mb-1.5 flex items-baseline justify-between px-1">
         <h2 className="text-[13px] font-semibold tracking-[0.01em] text-zinc-500 dark:text-zinc-400">
           {session.label}
