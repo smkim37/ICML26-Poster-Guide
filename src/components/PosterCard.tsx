@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 import { TIER_BORDER } from '../lib/labels';
 import type { Paper } from '../types';
@@ -7,8 +8,9 @@ import TypeBadge from './TypeBadge';
 import { CheckCircleIcon, StarIcon } from './icons';
 
 export default function PosterCard({ paper, context }: { paper: Paper; context?: string }) {
+  const { personal } = usePersonalMode();
   const { get, toggleVisited, toggleStarred } = useUserData();
-  const state = get(paper.id);
+  const state = personal ? get(paper.id) : {};
 
   const act = (e: React.MouseEvent, fn: () => void) => {
     e.preventDefault();
@@ -46,6 +48,7 @@ export default function PosterCard({ paper, context }: { paper: Paper; context?:
             </span>
           </div>
         </div>
+        {personal && (
         <div className="-my-1.5 flex shrink-0 flex-col items-center justify-center">
           <button
             onClick={(e) => act(e, () => toggleVisited(paper.id))}
@@ -70,6 +73,7 @@ export default function PosterCard({ paper, context }: { paper: Paper; context?:
             <StarIcon className="h-[22px] w-[22px]" filled={!!state.starred} />
           </button>
         </div>
+        )}
       </article>
     </Link>
   );

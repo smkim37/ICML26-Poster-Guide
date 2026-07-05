@@ -124,6 +124,7 @@ interface PaperState {
 - `useUserData`는 context로 1회 제공 — 카드와 상세가 같은 상태를 본다.
 - 포스터별 개별 키(`icml26-<id>`) 절대 금지.
 - 테마는 의도적으로 별도 키 `icml26.theme` (`'light'|'dark'|'system'`) — 기기 로컬 설정이라 백업에서 제외.
+- 개인 모드 키 `icml26.personal.v1` = `{version:1, until:epoch_ms}` — storage.ts의 `loadPersonalUntil/savePersonalUntil/clearPersonal`로만 접근. 백업에서 제외 (docs/01 §10).
 - 내보내기: UserData JSON 그대로 Blob → `URL.createObjectURL` 다운로드. 가져오기: 검증 → confirm → **전체 교체** (merge 구현 금지 — 버그 온상).
 
 ## 6. PWA (Phase 6 전용)

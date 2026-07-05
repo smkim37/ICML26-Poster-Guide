@@ -7,6 +7,7 @@ import TypeBadge from '../components/TypeBadge';
 import { CheckCircleIcon, ExternalIcon, StarIcon } from '../components/icons';
 import { PAPER_BY_ID } from '../data/posters';
 import { SESSIONS } from '../data/sessions';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 
 const DAY_FULL: Record<string, string> = {
@@ -27,6 +28,7 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
 export default function PaperPage() {
   const { id } = useParams();
   const paper = id ? PAPER_BY_ID.get(id) : undefined;
+  const { personal } = usePersonalMode();
   const { get, toggleVisited, toggleStarred } = useUserData();
 
   useEffect(() => {
@@ -114,6 +116,7 @@ export default function PaperPage() {
         </div>
       </div>
 
+      {personal && (
       <div className="grid grid-cols-2 gap-2">
         <button
           onClick={() => toggleVisited(paper.id)}
@@ -138,8 +141,9 @@ export default function PaperPage() {
           {get(paper.id).starred ? '별표 됨' : '별표'}
         </button>
       </div>
+      )}
 
-      <MemoEditor paperId={paper.id} />
+      {personal && <MemoEditor paperId={paper.id} />}
 
       <div className="grid grid-cols-2 gap-2 pb-2">
         <a

@@ -1,9 +1,11 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { BackIcon } from './icons';
 
 export default function AppHeader() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { personal } = usePersonalMode();
   const isDetail = pathname.startsWith('/paper/');
 
   // 딥링크로 상세에 직접 진입하면 히스토리가 없어 navigate(-1)이 무동작 → 홈으로 폴백
@@ -36,6 +38,12 @@ export default function AppHeader() {
         <h1 className="truncate text-[15px] font-bold">
           ICML 2026 <span className="font-normal text-zinc-500">Poster Guide</span>
         </h1>
+        {personal && (
+          <span
+            className="ml-auto h-1.5 w-1.5 shrink-0 rounded-full bg-accent dark:bg-accent-dark"
+            aria-label="개인 모드 활성"
+          />
+        )}
       </div>
     </header>
   );

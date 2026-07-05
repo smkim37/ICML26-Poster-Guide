@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { EMPTY_FILTERS, type Filters } from '../lib/filter';
 import type { PresType, Tier } from '../types';
 
@@ -64,6 +65,7 @@ export default function FilterSheet({
   onChange: (f: Filters) => void;
   onClose: () => void;
 }) {
+  const { personal } = usePersonalMode();
   // 시트 열림 동안 배경 스크롤 락
   useEffect(() => {
     if (!open) return;
@@ -128,13 +130,15 @@ export default function FilterSheet({
                 />
               ))}
             </Section>
-            <Section title="방문 여부">
-              <Chip
-                active={filters.unvisitedOnly}
-                label="미방문만"
-                onClick={() => onChange({ ...filters, unvisitedOnly: !filters.unvisitedOnly })}
-              />
-            </Section>
+            {personal && (
+              <Section title="방문 여부">
+                <Chip
+                  active={filters.unvisitedOnly}
+                  label="미방문만"
+                  onClick={() => onChange({ ...filters, unvisitedOnly: !filters.unvisitedOnly })}
+                />
+              </Section>
+            )}
           </div>
           <div className="mt-5 flex items-center gap-3">
             <button

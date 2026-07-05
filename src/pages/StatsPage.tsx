@@ -5,6 +5,7 @@ import StatTile from '../components/StatTile';
 import { OVERVIEW } from '../data/overview';
 import { PAPERS } from '../data/posters';
 import { SESSIONS } from '../data/sessions';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 import { TIER_BAR, TIER_LABEL } from '../lib/labels';
 import type { Tier } from '../types';
@@ -28,6 +29,7 @@ function Group({ title, children }: { title: string; children: React.ReactNode }
 }
 
 export default function StatsPage() {
+  const { personal } = usePersonalMode();
   const { data, get } = useUserData();
 
   const my = useMemo(() => {
@@ -66,7 +68,8 @@ export default function StatsPage() {
 
   return (
     <div className="space-y-5 px-4 py-5">
-      {/* 관람 진행률 */}
+      {/* 관람 진행률 — 개인 모드 전용 */}
+      {personal && (
       <section>
         <h2 className="mb-2 px-1 text-[13px] font-semibold text-zinc-500 dark:text-zinc-400">
           관람 진행률
@@ -102,6 +105,7 @@ export default function StatsPage() {
           </div>
         </div>
       </section>
+      )}
 
       {/* 내 리스트 분포 */}
       <section>

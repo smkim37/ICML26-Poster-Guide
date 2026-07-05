@@ -35,6 +35,43 @@ export function saveUserData(d: UserData): void {
   }
 }
 
+// ---- 개인 모드 (docs/01 §10) ----
+const PERSONAL_KEY = 'icml26.personal.v1';
+
+export function loadPersonalUntil(): number | null {
+  try {
+    const raw = localStorage.getItem(PERSONAL_KEY);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    if (
+      typeof parsed === 'object' && parsed !== null &&
+      (parsed as { version?: number }).version === 1 &&
+      typeof (parsed as { until?: number }).until === 'number'
+    ) {
+      return (parsed as { until: number }).until;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+export function savePersonalUntil(until: number): void {
+  try {
+    localStorage.setItem(PERSONAL_KEY, JSON.stringify({ version: 1, until }));
+  } catch {
+    // 무시
+  }
+}
+
+export function clearPersonal(): void {
+  try {
+    localStorage.removeItem(PERSONAL_KEY);
+  } catch {
+    // 무시
+  }
+}
+
 export function parseBackup(text: string): UserData | null {
   try {
     const parsed: unknown = JSON.parse(text);

@@ -40,6 +40,7 @@ npm run preview    # PWA/오프라인 테스트는 반드시 여기서
 - `min-h-dvh` (h-screen 금지), safe-area 패딩 유지, 터치 타깃 ≥44pt
 - PWA는 Phase 6에서만, docs/02 §6 설정 verbatim, runtimeCaching 추가 금지
 - 상태/UI킷/아이콘/차트 라이브러리 설치 금지
+- 개인화 UI(체크·별표·메모·백업·진행률)는 개인 모드(docs/01 §10) 뒤에 있음 — 비밀번호 해시·유지시간은 `src/hooks/usePersonalMode.tsx`의 `PW_HASH`/`PERSONAL_TTL_MS`
 
 ## 작업 프로토콜
 

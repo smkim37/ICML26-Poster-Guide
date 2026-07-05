@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { OVERVIEW } from '../data/overview';
 import { PAPERS } from '../data/posters';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useTheme, type Theme } from '../hooks/useTheme';
 import { useUserData } from '../hooks/useUserData';
 import { downloadBackup, parseBackup } from '../lib/storage';
@@ -24,8 +25,88 @@ const THEMES: { v: Theme; label: string }[] = [
   { v: 'dark', label: '다크' },
 ];
 
+// 개인 모드 잠금/해제 (docs/01 §10) — 소유자 전용 기능의 간단 게이트
+function PersonalSection() {
+  const { personal, until, unlock, lock } = usePersonalMode();
+  const [pw, setPw] = useState('');
+  const [error, setError] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  if (personal) {
+    const hhmm = until
+      ? new Date(until).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })
+      : '';
+    return (
+      <Section title="개인 모드">
+        <div className="flex items-center justify-between">
+          <p className="text-[13px] text-zinc-600 dark:text-zinc-300">
+            <span className="mr-1.5 inline-block h-1.5 w-1.5 rounded-full bg-tier-core align-middle dark:bg-tier-core-dark" />
+            활성 · {hhmm}까지 유지
+          </p>
+          <button
+            onClick={lock}
+            className="flex h-11 items-center rounded-[10px] border border-zinc-200 bg-white px-4 text-[13px] font-semibold text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+          >
+            잠금
+          </button>
+        </div>
+      </Section>
+    );
+  }
+
+  const submit = async () => {
+    if (!pw || busy) return;
+    setBusy(true);
+    const ok = await unlock(pw);
+    setBusy(false);
+    if (!ok) {
+      setError(true);
+      setPw('');
+    }
+  };
+
+  return (
+    <Section title="개인 모드">
+      <p className="mb-3 text-[13px] leading-relaxed text-zinc-500">
+        방문 체크·별표·메모 기능은 소유자 전용입니다.
+      </p>
+      <div className="flex gap-2">
+        <input
+          type="password"
+          inputMode="numeric"
+          autoComplete="off"
+          enterKeyHint="done"
+          value={pw}
+          onChange={(e) => {
+            setPw(e.target.value);
+            setError(false);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') submit();
+          }}
+          placeholder="비밀번호"
+          className="h-11 min-w-0 flex-1 rounded-[10px] border border-zinc-200 bg-white px-3.5 text-[14px] outline-none placeholder:text-zinc-400 focus:border-accent dark:border-zinc-800 dark:bg-zinc-900 dark:focus:border-accent-dark"
+        />
+        <button
+          onClick={submit}
+          disabled={busy}
+          className="h-11 shrink-0 rounded-[10px] bg-accent px-5 text-[14px] font-semibold text-white disabled:opacity-50 dark:bg-accent-dark dark:text-zinc-900"
+        >
+          해제
+        </button>
+      </div>
+      {error && (
+        <p className="mt-2 text-[12px] text-red-500 dark:text-red-400">
+          비밀번호가 올바르지 않습니다.
+        </p>
+      )}
+    </Section>
+  );
+}
+
 export default function SettingsPage() {
   const [theme, setTheme] = useTheme();
+  const { personal } = usePersonalMode();
   const { data, importData, resetAll } = useUserData();
   const fileRef = useRef<HTMLInputElement>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -70,6 +151,9 @@ export default function SettingsPage() {
         </div>
       </Section>
 
+      <PersonalSection />
+
+      {personal && (
       <Section title="백업">
         <p className="mb-3 text-[13px] leading-relaxed text-zinc-500">
           방문·별표·메모 기록({markedCount}개 항목)을 JSON 파일로 보관하거나 다른 기기로 옮길 수
@@ -109,7 +193,9 @@ export default function SettingsPage() {
           </p>
         )}
       </Section>
+      )}
 
+      {personal && (
       <Section title="데이터 초기화">
         <button
           onClick={() => {
@@ -126,6 +212,7 @@ export default function SettingsPage() {
           모든 기록 삭제
         </button>
       </Section>
+      )}
 
       <Section title="정보">
         <dl className="space-y-2 text-[13px]">
