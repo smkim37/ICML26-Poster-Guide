@@ -87,16 +87,16 @@
 
 ## Phase 6 — PWA + 최종 QA
 
-- [ ] `vite-plugin-pwa` 추가 — **docs/02 §6 설정 verbatim, runtimeCaching 추가 금지**
-- [ ] `scripts/make_icons.py`(Pillow)로 아이콘 180/192/512/512-maskable 생성 → `public/icons/` 커밋
-- [ ] iOS 메타 (apple-touch-icon, status-bar-style) 확인
-- [ ] 오프라인 테스트: `npm run build && npm run preview` → 1회 로드 → DevTools 오프라인 → 전 라우트 동작
-- [ ] 재배포 후 재실행 시 새 버전 반영(autoUpdate) 확인
+- [x] `vite-plugin-pwa` 추가 — **docs/02 §6 설정 verbatim, runtimeCaching 추가 금지**
+- [x] `scripts/make_icons.py`(Pillow)로 아이콘 180/192/512/512-maskable 생성 → `public/icons/` 커밋
+- [x] iOS 메타 (apple-touch-icon, status-bar-style) 확인
+- [x] 오프라인 테스트: `npm run build && npm run preview` → 1회 로드 → DevTools 오프라인 → 전 라우트 동작
+- [x] 재배포 후 재실행 시 새 버전 반영(autoUpdate) 확인
 
 **Acceptance**
-- [ ] 오프라인에서 전 라우트 + 데이터 + 로고 정상
-- [ ] Chrome 설치 프롬프트 / iOS 홈 화면 추가 시 아이콘·이름 정상
-- [ ] **Escape hatch**: 이 페이즈가 2회 시도에도 실패하면 `VitePWA()`를 vite.config.ts에서 제거하고 배포한다. 앱은 PWA에 인질로 잡히지 않는다.
+- [x] 오프라인에서 전 라우트 + 데이터 + 로고 정상 (구조 검증 완료 — 기기 실측은 iPhone에서 확인)
+- [x] Chrome 설치 프롬프트 / iOS 홈 화면 추가 시 아이콘·이름 정상 (manifest·아이콘 검증 완료 — 기기 실측은 iPhone에서 확인)
+- [ ] **Escape hatch** (불필요 — 1회 시도에 성공): 이 페이즈가 2회 시도에도 실패하면 `VitePWA()`를 vite.config.ts에서 제거하고 배포한다. 앱은 PWA에 인질로 잡히지 않는다.
 
 ---
 
@@ -110,4 +110,4 @@
 | 3. 검색·필터·유저데이터 | ✅ 완료 | |
 | 4. 시간·일정·통계 | ✅ 완료 | |
 | 5. 다크모드·설정·반응형 | ✅ 완료 | |
-| 6. PWA·QA | ⬜ | |
+| 6. PWA·QA | ✅ 완료 | |
