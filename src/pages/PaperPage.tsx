@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import EmptyState from '../components/EmptyState';
+import MemoEditor from '../components/MemoEditor';
 import TierBadge from '../components/TierBadge';
 import TypeBadge from '../components/TypeBadge';
-import { ExternalIcon } from '../components/icons';
+import { CheckCircleIcon, ExternalIcon, StarIcon } from '../components/icons';
 import { PAPER_BY_ID } from '../data/posters';
 import { SESSIONS } from '../data/sessions';
+import { useUserData } from '../hooks/useUserData';
 
 const DAY_FULL: Record<string, string> = {
   tue: '7월 7일 (화)',
@@ -25,6 +27,7 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
 export default function PaperPage() {
   const { id } = useParams();
   const paper = id ? PAPER_BY_ID.get(id) : undefined;
+  const { get, toggleVisited, toggleStarred } = useUserData();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -110,6 +113,33 @@ export default function PaperPage() {
           </span>
         </div>
       </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          onClick={() => toggleVisited(paper.id)}
+          className={`flex h-12 items-center justify-center gap-2 rounded-[10px] border text-[14px] font-semibold transition-colors duration-150 ${
+            get(paper.id).visited
+              ? 'border-accent bg-accent text-white dark:border-accent-dark dark:bg-accent-dark dark:text-zinc-900'
+              : 'border-zinc-200 bg-white text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
+          }`}
+        >
+          <CheckCircleIcon className="h-5 w-5" filled={!!get(paper.id).visited} />
+          {get(paper.id).visited ? '방문 완료' : '방문 체크'}
+        </button>
+        <button
+          onClick={() => toggleStarred(paper.id)}
+          className={`flex h-12 items-center justify-center gap-2 rounded-[10px] border text-[14px] font-semibold transition-colors duration-150 ${
+            get(paper.id).starred
+              ? 'border-tier-reference/40 bg-tier-reference/10 text-tier-reference dark:border-tier-reference-dark/40 dark:bg-tier-reference-dark/10 dark:text-tier-reference-dark'
+              : 'border-zinc-200 bg-white text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300'
+          }`}
+        >
+          <StarIcon className="h-5 w-5" filled={!!get(paper.id).starred} />
+          {get(paper.id).starred ? '별표 됨' : '별표'}
+        </button>
+      </div>
+
+      <MemoEditor paperId={paper.id} />
 
       <div className="grid grid-cols-2 gap-2 pb-2">
         <a

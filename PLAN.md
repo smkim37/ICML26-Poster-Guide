@@ -49,16 +49,16 @@
 
 ## Phase 3 — 검색 · 필터 · 유저 데이터
 
-- [ ] `lib/filter.ts` (순수 함수) + SearchBar(150ms 디바운스) + FilterSheet(티어/발표유형/기관유형/참고분류/미방문)
-- [ ] `lib/storage.ts` (localStorage 유일 게이트, `icml26.userdata.v1`) + `useUserData` 컨텍스트 — docs/02 §5 스키마 verbatim
-- [ ] 카드에서 방문 체크·별표 (터치 타깃 ≥44pt), 상세에서 방문·별표·메모(MemoEditor, blur 시 저장)
-- [ ] 세션 헤더에 진행률 (방문 x/y + ProgressBar)
+- [x] `lib/filter.ts` (순수 함수) + SearchBar(150ms 디바운스) + FilterSheet(티어/발표유형/기관유형/참고분류/미방문)
+- [x] `lib/storage.ts` (localStorage 유일 게이트, `icml26.userdata.v1`) + `useUserData` 컨텍스트 — docs/02 §5 스키마 verbatim
+- [x] 카드에서 방문 체크·별표 (터치 타깃 ≥44pt), 상세에서 방문·별표·메모(MemoEditor, blur 시 저장)
+- [x] 세션 헤더에 진행률 (방문 x/y + ProgressBar)
 
 **Acceptance**
-- [ ] "grounding" 검색 → 제목/소개/저자/소속 대소문자 무시 매칭
-- [ ] 필터는 facet 간 AND 결합, 칩 다중 선택 가능
-- [ ] 방문/별표/메모가 강력 새로고침 후 유지, localStorage 키가 정확히 `icml26.userdata.v1` 하나
-- [ ] 방문한 카드는 시각적으로 가라앉음(불투명도 55%), 결과 없으면 EmptyState
+- [x] "grounding" 검색 → 제목/소개/저자/소속 대소문자 무시 매칭
+- [x] 필터는 facet 간 AND 결합, 칩 다중 선택 가능
+- [x] 방문/별표/메모가 강력 새로고침 후 유지, localStorage 키가 정확히 `icml26.userdata.v1` 하나
+- [x] 방문한 카드는 시각적으로 가라앉음(불투명도 55%), 결과 없으면 EmptyState
 
 ## Phase 4 — 시간 인지 + 일정 가이드 + 통계
 
@@ -107,7 +107,7 @@
 | 0. 기획·데이터·자산 (이 repo의 초기 상태) | ✅ 완료 | initial commit |
 | 1. 스캐폴드+데이터+배포 | ✅ 완료 | 0add237 |
 | 2. 리스트+상세 | ✅ 완료 | (this) |
-| 3. 검색·필터·유저데이터 | ⬜ | |
+| 3. 검색·필터·유저데이터 | ✅ 완료 | |
 | 4. 시간·일정·통계 | ⬜ | |
 | 5. 다크모드·설정·반응형 | ⬜ | |
 | 6. PWA·QA | ⬜ | |
