@@ -20,32 +20,32 @@
 
 > 목적: base-path/배포 문제를 프로젝트 첫날에 노출시킨다. UI는 없어도 된다.
 
-- [ ] Vite + React + TS 스캐폴드. **의존성 버전은 docs/02 §1의 package.json 그대로** (Tailwind 3.4, react-router-dom 6 — v4/v7 금지)
-- [ ] Tailwind 3 설정 (`tailwind.config.js` darkMode:'class', postcss) — docs/03 토큰 반영
-- [ ] `vite.config.ts`: `base: '/ICML26-Poster-Guide/'` (docs/02 §3 verbatim, PWA 플러그인은 아직 넣지 않음)
-- [ ] `src/types.ts`, `src/data/posters.ts`(JSON 정적 import), `src/data/sessions.ts`, `src/data/overview.ts`, `src/lib/labels.ts` — docs/04 verbatim
-- [ ] `index.html` head 블록 (viewport-fit=cover 등) — docs/02 §8 verbatim
-- [ ] 임시 App: "137편 로드됨 · 화 41 / 수 35 / 목 46 / 미정 15" 출력
-- [ ] `.github/workflows/deploy.yml` — docs/06 verbatim. push 후 Actions 성공 확인
+- [x] Vite + React + TS 스캐폴드. **의존성 버전은 docs/02 §1의 package.json 그대로** (Tailwind 3.4, react-router-dom 6 — v4/v7 금지)
+- [x] Tailwind 3 설정 (`tailwind.config.js` darkMode:'class', postcss) — docs/03 토큰 반영
+- [x] `vite.config.ts`: `base: '/ICML26-Poster-Guide/'` (docs/02 §3 verbatim, PWA 플러그인은 아직 넣지 않음)
+- [x] `src/types.ts`, `src/data/posters.ts`(JSON 정적 import), `src/data/sessions.ts`, `src/data/overview.ts`, `src/lib/labels.ts` — docs/04 verbatim
+- [x] `index.html` head 블록 (viewport-fit=cover 등) — docs/02 §8 verbatim
+- [x] 임시 App: "137편 로드됨 · 화 41 / 수 35 / 목 46 / 미정 15" 출력
+- [x] `.github/workflows/deploy.yml` — docs/06 verbatim. push 후 Actions 성공 확인
 
 **Acceptance**
-- [ ] `npm run dev` / `npm run build` 성공, TS 에러 0
-- [ ] 화면에 137편 카운트가 데이터에서 계산되어 표시됨
-- [ ] **라이브 URL이 렌더되고 Network 탭에 404 없음** (Pages 소스가 "GitHub Actions"로 설정돼 있어야 함 — docs/06)
+- [x] `npm run dev` / `npm run build` 성공, TS 에러 0
+- [x] 화면에 137편 카운트가 데이터에서 계산되어 표시됨
+- [x] **라이브 URL이 렌더되고 Network 탭에 404 없음** (Pages 소스가 "GitHub Actions"로 설정돼 있어야 함 — docs/06)
 
 ## Phase 2 — 리스트 + 상세 (읽기 전용 코어)
 
-- [ ] `HashRouter` + 라우트 5개 (docs/01 §1) + `App.tsx` 셸 (AppHeader/TabBar)
-- [ ] AppHeader(로고+타이틀, safe-area-top) / TabBar(4탭, safe-area-bottom) — docs/03 스펙
-- [ ] DayTabs(화·수·목·미정) + SessionGroup(세션 헤더: 이름·시간·장소) + PosterCard + TierBadge/TypeBadge
-- [ ] 정렬: 세션은 시간순(SESSIONS 배열 순서), **세션 내 posterNum 오름차순**, 미정 탭은 티어순(핵심→관련→참고)
-- [ ] PaperPage: 전체 필드 + OpenReview/ICML 링크 버튼(`target="_blank" rel="noopener"`)
+- [x] `HashRouter` + 라우트 5개 (docs/01 §1) + `App.tsx` 셸 (AppHeader/TabBar)
+- [x] AppHeader(로고+타이틀, safe-area-top) / TabBar(4탭, safe-area-bottom) — docs/03 스펙
+- [x] DayTabs(화·수·목·미정) + SessionGroup(세션 헤더: 이름·시간·장소) + PosterCard + TierBadge/TypeBadge
+- [x] 정렬: 세션은 시간순(SESSIONS 배열 순서), **세션 내 posterNum 오름차순**, 미정 탭은 티어순(핵심→관련→참고)
+- [x] PaperPage: 전체 필드 + OpenReview/ICML 링크 버튼(`target="_blank" rel="noopener"`)
 
 **Acceptance**
-- [ ] 4개 탭이 각각 41 / 35 / 46 / 15편 표시
-- [ ] 7/7 탭에 ORAL1(AUDITORIUM, 10:30–10:45)이 별도 그룹으로 표시됨
-- [ ] 카드 탭 → 상세 → 브라우저 뒤로가기 시 **같은 일자 탭으로 복귀** (sessionStorage)
-- [ ] 두 외부 링크가 새 탭에서 열림
+- [x] 4개 탭이 각각 41 / 35 / 46 / 15편 표시
+- [x] 7/7 탭에 ORAL1(AUDITORIUM, 10:30–10:45)이 별도 그룹으로 표시됨
+- [x] 카드 탭 → 상세 → 브라우저 뒤로가기 시 **같은 일자 탭으로 복귀** (sessionStorage)
+- [x] 두 외부 링크가 새 탭에서 열림
 
 ## Phase 3 — 검색 · 필터 · 유저 데이터
 
@@ -105,8 +105,8 @@
 | Phase | 상태 | 커밋 |
 |---|---|---|
 | 0. 기획·데이터·자산 (이 repo의 초기 상태) | ✅ 완료 | initial commit |
-| 1. 스캐폴드+데이터+배포 | ⬜ | |
-| 2. 리스트+상세 | ⬜ | |
+| 1. 스캐폴드+데이터+배포 | ✅ 완료 | 0add237 |
+| 2. 리스트+상세 | ✅ 완료 | (this) |
 | 3. 검색·필터·유저데이터 | ⬜ | |
 | 4. 시간·일정·통계 | ⬜ | |
 | 5. 다크모드·설정·반응형 | ⬜ | |

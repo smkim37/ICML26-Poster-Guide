@@ -3,7 +3,7 @@
 ICML 2026 (서울 COEX, 2026.7.6–7.11) 개인용 포스터 관람 가이드 웹앱.
 직접 큐레이션한 관심 포스터 **137편**(핵심 30 · 관련 52 · 참고 55)을 일자·세션·포스터 번호 동선 순으로 효율적으로 관람하기 위한 도구.
 
-**Live**: https://smkim37.github.io/ICML26-Poster-Guide/
+**Live**: https://sumin-kim.com/ICML26-Poster-Guide/ (= https://smkim37.github.io/ICML26-Poster-Guide/)
 
 ## 기능
 
