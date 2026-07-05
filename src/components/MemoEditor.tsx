@@ -6,6 +6,8 @@ export default function MemoEditor({ paperId }: { paperId: string }) {
   const [value, setValue] = useState(() => get(paperId).memo ?? '');
   const [saved, setSaved] = useState(false);
   const ref = useRef<HTMLTextAreaElement>(null);
+  const latest = useRef({ paperId, value });
+  latest.current = { paperId, value };
 
   // 다른 논문으로 이동 시 값 동기화
   useEffect(() => {
@@ -13,6 +15,12 @@ export default function MemoEditor({ paperId }: { paperId: string }) {
     setSaved(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paperId]);
+
+  // blur 없이 이탈(스와이프백 등)해도 저장 유실 방지
+  useEffect(
+    () => () => setMemo(latest.current.paperId, latest.current.value.trim()),
+    [setMemo],
+  );
 
   const autosize = () => {
     const el = ref.current;
