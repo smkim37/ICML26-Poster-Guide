@@ -38,6 +38,14 @@ function validUntil(): number | null {
   return until !== null && until > Date.now() ? until : null;
 }
 
+function StepChip({ children }: { children: ReactNode }) {
+  return (
+    <span className="rounded-md bg-zinc-100 px-2 py-1 font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+      {children}
+    </span>
+  );
+}
+
 function GuideModal({ onClose }: { onClose: () => void }) {
   const navigate = useNavigate();
   return (
@@ -46,9 +54,15 @@ function GuideModal({ onClose }: { onClose: () => void }) {
       <div className="relative w-full max-w-xs animate-slideup rounded-2xl bg-white p-5 dark:bg-zinc-900">
         <h2 className="text-[15px] font-bold">개인 모드 전용 기능</h2>
         <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400">
-          방문 체크·별표·메모는 소유자 전용입니다. 설정 탭에서 비밀번호로 개인 모드를
-          활성화하면 사용할 수 있어요.
+          방문 체크·별표·메모는 소유자 전용입니다. 사용하려면:
         </p>
+        <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[12px]">
+          <StepChip>설정</StepChip>
+          <span className="text-zinc-400">→</span>
+          <StepChip>개인 모드</StepChip>
+          <span className="text-zinc-400">→</span>
+          <StepChip>비밀번호 입력</StepChip>
+        </div>
         <div className="mt-4 grid grid-cols-2 gap-2">
           <button
             onClick={onClose}
@@ -60,6 +74,8 @@ function GuideModal({ onClose }: { onClose: () => void }) {
             onClick={() => {
               onClose();
               navigate('/settings');
+              // SPA 탭 전환은 스크롤을 유지하므로 개인 모드 섹션(최상단)으로 명시 이동
+              requestAnimationFrame(() => window.scrollTo(0, 0));
             }}
             className="h-11 rounded-[10px] bg-accent text-[14px] font-semibold text-white dark:bg-accent-dark dark:text-zinc-900"
           >

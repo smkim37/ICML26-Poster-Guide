@@ -145,7 +145,7 @@ export default function ListPage() {
           ) : (
             <>
               <p className="mb-3 px-1 text-[12px] leading-relaxed text-zinc-400">
-                조사 시점(7/5) 세션 미배정 — 현장에서 ICML 앱으로 일정을 확인하세요.
+                7/6 재확인 기준 세션 미배정 — 현장에서 ICML 앱으로 일정을 확인하세요.
               </p>
               <div className="flex flex-col gap-2 pb-4">
                 {tbdSorted.map((p) => (

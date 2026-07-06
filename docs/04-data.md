@@ -112,6 +112,9 @@ export const DAY_LABEL    = { tue: '화 7/7', wed: '수 7/8', thu: '목 7/9' } a
 
 ## 6. 엑셀 재수출 갱신 플로우 (미정 15편이 배정되면)
 
+> 재확인 이력: **2026-07-06** — 미정 15편의 icml.cc 페이지를 개별 확인, 전원 여전히 미배정
+> (배정된 대조군 포스터로 추출 방식 검증 완료). 배정 확인 시 이 플로우 또는 오버라이드 방식으로 반영.
+
 1. 새 엑셀로 `data/ICML2026 Poster Guide.xlsx` 덮어쓰기 (파일명 유지)
 2. `python3 scripts/excel_to_json.py` — 출력에서 **세션 변경 diff와 총계** 확인
 3. xlsx + posters.json 함께 커밋 → push → Actions가 자동 재배포

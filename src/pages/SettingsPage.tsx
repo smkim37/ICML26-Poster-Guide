@@ -133,6 +133,9 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-5 px-4 py-5">
+      {/* 팝업 "설정으로 이동"이 최상단으로 오므로 개인 모드가 첫 섹션 */}
+      <PersonalSection />
+
       <Section title="테마">
         <div className="grid grid-cols-3 gap-1 rounded-[10px] bg-zinc-100 p-1 dark:bg-zinc-800">
           {THEMES.map((t) => (
@@ -150,8 +153,6 @@ export default function SettingsPage() {
           ))}
         </div>
       </Section>
-
-      <PersonalSection />
 
       <Section title="백업">
         <p className="mb-3 text-[13px] leading-relaxed text-zinc-500">
