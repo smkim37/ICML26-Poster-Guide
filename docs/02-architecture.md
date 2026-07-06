@@ -73,12 +73,14 @@ Vite 5 + React 18 + TypeScript + Tailwind CSS **3.4** + react-router-dom **6** +
     │   ├── labels.ts              # enum → 한국어 표기 + 티어 색 클래스
     │   └── storage.ts             # §5
     ├── hooks/
-    │   ├── useUserData.ts         # context + {data, toggleVisited, toggleStarred, setMemo, importData, resetAll}
+    │   ├── useUserData.tsx        # context + {data, toggleVisited, toggleStarred, setMemo, importData, resetAll}
+    │   ├── usePersonalMode.tsx    # 개인 모드 게이트 + 안내 팝업 (docs/01 §10) — PW_HASH/PERSONAL_TTL_MS
     │   ├── useNow.ts              # 30초 간격 KST now, 필요한 곳에만 마운트
-    │   └── useTheme.ts            # light/dark/system
+    │   └── useTheme.ts            # light/dark/system (모듈 레벨 시스템 외관 추적)
     ├── components/                # docs/01 인벤토리: AppHeader, TabBar, NowBanner, DayTabs,
     │                              # SearchBar, FilterSheet, SessionGroup, PosterCard, TierBadge,
     │                              # TypeBadge, ProgressBar, StatTile, StatBar, MemoEditor, EmptyState
+    │                              # + icons.tsx (인라인 SVG 아이콘 모음)
     └── pages/                     # ListPage, PaperPage, SchedulePage, StatsPage, SettingsPage
 ```
 
@@ -190,7 +192,8 @@ export function nowKST(now?: Date): { date: string; minutes: number } {
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<!-- black-translucent는 라이트 테마에서 상태바 텍스트(흰색)가 안 보임 → default + theme-color 조합 -->
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
 <meta name="theme-color" content="#09090b" media="(prefers-color-scheme: dark)" />
 <link rel="icon" type="image/svg+xml" href="/ICML26-Poster-Guide/icml-navbar-logo.svg" />
