@@ -8,14 +8,14 @@ import TypeBadge from './TypeBadge';
 import { CheckCircleIcon, StarIcon } from './icons';
 
 export default function PosterCard({ paper, context }: { paper: Paper; context?: string }) {
-  const { personal } = usePersonalMode();
+  const { requirePersonal } = usePersonalMode();
   const { get, toggleVisited, toggleStarred } = useUserData();
-  const state = personal ? get(paper.id) : {};
+  const state = get(paper.id);
 
   const act = (e: React.MouseEvent, fn: () => void) => {
     e.preventDefault();
     e.stopPropagation();
-    fn();
+    if (requirePersonal()) fn(); // 잠금 상태면 안내 팝업 (docs/01 §10)
   };
 
   return (
@@ -48,7 +48,6 @@ export default function PosterCard({ paper, context }: { paper: Paper; context?:
             </span>
           </div>
         </div>
-        {personal && (
         <div className="-my-1.5 flex shrink-0 flex-col items-center justify-center">
           <button
             onClick={(e) => act(e, () => toggleVisited(paper.id))}
@@ -73,7 +72,6 @@ export default function PosterCard({ paper, context }: { paper: Paper; context?:
             <StarIcon className="h-[22px] w-[22px]" filled={!!state.starred} />
           </button>
         </div>
-        )}
       </article>
     </Link>
   );

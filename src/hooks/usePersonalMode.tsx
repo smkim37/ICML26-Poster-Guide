@@ -6,19 +6,24 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { clearPersonal, loadPersonalUntil, savePersonalUntil } from '../lib/storage';
 
-// 개인 모드: 방문 체크·별표·메모·백업 UI를 소유자에게만 노출하는 간단 게이트 (docs/01 §10).
+// 개인 모드: 방문 체크·별표·메모·백업은 UI로는 모두에게 보이지만,
+// 실제 사용은 소유자만 가능한 간단 게이트 (docs/01 §10). 잠금 상태에서
+// 개인화 기능을 시도하면 안내 팝업("설정 → 개인 모드 활성화")을 띄운다.
 // 강력한 보안 아님 — 코드에는 비밀번호의 SHA-256 hex만 둔다. 비밀번호 변경 시 이 상수 교체:
 //   node -e "crypto.subtle.digest('SHA-256', new TextEncoder().encode('새비번')).then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))"
 const PW_HASH = '318aee3fed8c9d040d35a7fc1fa776fb31303833aa2de885354ddf3d44d8fb69';
-export const PERSONAL_TTL_MS = 5 * 60 * 1000; // 해제 유지 5분 (사용자 확정)
+export const PERSONAL_TTL_MS = 10 * 60 * 1000; // 해제 유지 10분
 
 interface PersonalModeCtx {
   personal: boolean;
   until: number | null;
   unlock: (pw: string) => Promise<boolean>;
   lock: () => void;
+  /** 개인 모드면 true. 아니면 안내 팝업을 띄우고 false — 개인화 액션 핸들러 첫 줄에서 호출 */
+  requirePersonal: () => boolean;
 }
 
 const Ctx = createContext<PersonalModeCtx | null>(null);
@@ -33,8 +38,43 @@ function validUntil(): number | null {
   return until !== null && until > Date.now() ? until : null;
 }
 
+function GuideModal({ onClose }: { onClose: () => void }) {
+  const navigate = useNavigate();
+  return (
+    <div className="fixed inset-0 z-40 flex items-center justify-center p-6" role="dialog" aria-modal="true">
+      <button aria-label="닫기" onClick={onClose} className="absolute inset-0 animate-fadein bg-black/40" />
+      <div className="relative w-full max-w-xs animate-slideup rounded-2xl bg-white p-5 dark:bg-zinc-900">
+        <h2 className="text-[15px] font-bold">개인 모드 전용 기능</h2>
+        <p className="mt-1.5 text-[13px] leading-relaxed text-zinc-500 dark:text-zinc-400">
+          방문 체크·별표·메모는 소유자 전용입니다. 설정 탭에서 비밀번호로 개인 모드를
+          활성화하면 사용할 수 있어요.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          <button
+            onClick={onClose}
+            className="h-11 rounded-[10px] border border-zinc-200 bg-white text-[14px] font-semibold text-zinc-600 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-300"
+          >
+            닫기
+          </button>
+          <button
+            onClick={() => {
+              onClose();
+              navigate('/settings');
+            }}
+            className="h-11 rounded-[10px] bg-accent text-[14px] font-semibold text-white dark:bg-accent-dark dark:text-zinc-900"
+          >
+            설정으로 이동
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function PersonalModeProvider({ children }: { children: ReactNode }) {
   const [until, setUntil] = useState<number | null>(validUntil);
+  const [guideOpen, setGuideOpen] = useState(false);
+  const personal = until !== null;
 
   // 만료 자동 잠금 + iOS 홈스크린 재개(visibilitychange) 시 재검사
   useEffect(() => {
@@ -59,13 +99,20 @@ export function PersonalModeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const lock = useCallback(() => {
-    clearPersonal(); // userdata는 건드리지 않는다 — 숨김일 뿐
+    clearPersonal(); // userdata는 건드리지 않는다 — 잠금은 숨김일 뿐
     setUntil(null);
   }, []);
 
+  const requirePersonal = useCallback(() => {
+    if (personal) return true;
+    setGuideOpen(true);
+    return false;
+  }, [personal]);
+
   return (
-    <Ctx.Provider value={{ personal: until !== null, until, unlock, lock }}>
+    <Ctx.Provider value={{ personal, until, unlock, lock, requirePersonal }}>
       {children}
+      {guideOpen && <GuideModal onClose={() => setGuideOpen(false)} />}
     </Ctx.Provider>
   );
 }

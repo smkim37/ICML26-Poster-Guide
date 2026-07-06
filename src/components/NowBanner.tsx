@@ -1,6 +1,5 @@
 import { PAPERS } from '../data/posters';
 import { useNow } from '../hooks/useNow';
-import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 import { getSessionStatus } from '../lib/time';
 import type { DayId, SessionId } from '../types';
@@ -13,7 +12,6 @@ export default function NowBanner({
   onJump: (day: DayId, sessionId: SessionId) => void;
 }) {
   const now = useNow();
-  const { personal } = usePersonalMode();
   const { get } = useUserData();
   const status = getSessionStatus(now);
 
@@ -34,10 +32,9 @@ export default function NowBanner({
 
   if (status.phase === 'during') {
     const { current, minutesLeft } = status;
-    const core = PAPERS.filter((p) => p.session === current.id && p.tier === 'core');
-    const coreInfo = personal
-      ? `미방문 핵심 ${core.filter((p) => !get(p.id).visited).length}편`
-      : `핵심 ${core.length}편`;
+    const coreLeft = PAPERS.filter(
+      (p) => p.session === current.id && p.tier === 'core' && !get(p.id).visited,
+    ).length;
     return (
       <button className={`${base} w-[calc(100%-2rem)]`} onClick={() => onJump(current.day, current.id)}>
         <span className="relative flex h-1.5 w-1.5 shrink-0">
@@ -45,7 +42,7 @@ export default function NowBanner({
           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-current" />
         </span>
         <span className="min-w-0 truncate">
-          지금 {current.label} · 종료까지 {minutesLeft}분 · {coreInfo}
+          지금 {current.label} · 종료까지 {minutesLeft}분 · 미방문 핵심 {coreLeft}편
         </span>
       </button>
     );

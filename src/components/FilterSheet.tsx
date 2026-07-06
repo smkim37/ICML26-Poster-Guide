@@ -65,7 +65,7 @@ export default function FilterSheet({
   onChange: (f: Filters) => void;
   onClose: () => void;
 }) {
-  const { personal } = usePersonalMode();
+  const { requirePersonal } = usePersonalMode();
   // 시트 열림 동안 배경 스크롤 락
   useEffect(() => {
     if (!open) return;
@@ -130,15 +130,16 @@ export default function FilterSheet({
                 />
               ))}
             </Section>
-            {personal && (
-              <Section title="방문 여부">
-                <Chip
-                  active={filters.unvisitedOnly}
-                  label="미방문만"
-                  onClick={() => onChange({ ...filters, unvisitedOnly: !filters.unvisitedOnly })}
-                />
-              </Section>
-            )}
+            <Section title="방문 여부">
+              <Chip
+                active={filters.unvisitedOnly}
+                label="미방문만"
+                onClick={() =>
+                  requirePersonal() &&
+                  onChange({ ...filters, unvisitedOnly: !filters.unvisitedOnly })
+                }
+              />
+            </Section>
           </div>
           <div className="mt-5 flex items-center gap-3">
             <button

@@ -106,7 +106,7 @@ function PersonalSection() {
 
 export default function SettingsPage() {
   const [theme, setTheme] = useTheme();
-  const { personal } = usePersonalMode();
+  const { requirePersonal } = usePersonalMode();
   const { data, importData, resetAll } = useUserData();
   const fileRef = useRef<HTMLInputElement>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -153,7 +153,6 @@ export default function SettingsPage() {
 
       <PersonalSection />
 
-      {personal && (
       <Section title="백업">
         <p className="mb-3 text-[13px] leading-relaxed text-zinc-500">
           방문·별표·메모 기록({markedCount}개 항목)을 JSON 파일로 보관하거나 다른 기기로 옮길 수
@@ -162,6 +161,7 @@ export default function SettingsPage() {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => {
+              if (!requirePersonal()) return;
               downloadBackup(data);
               flash('백업 파일 다운로드됨');
             }}
@@ -170,7 +170,7 @@ export default function SettingsPage() {
             내보내기
           </button>
           <button
-            onClick={() => fileRef.current?.click()}
+            onClick={() => requirePersonal() && fileRef.current?.click()}
             className="h-11 rounded-[10px] border border-zinc-200 bg-white text-[14px] font-semibold text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
           >
             가져오기
@@ -193,12 +193,11 @@ export default function SettingsPage() {
           </p>
         )}
       </Section>
-      )}
 
-      {personal && (
       <Section title="데이터 초기화">
         <button
           onClick={() => {
+            if (!requirePersonal()) return;
             if (
               confirm('방문·별표·메모 기록을 전부 삭제합니다.') &&
               confirm('정말 삭제할까요? 되돌릴 수 없습니다. (내보내기로 백업을 권장)')
@@ -212,7 +211,6 @@ export default function SettingsPage() {
           모든 기록 삭제
         </button>
       </Section>
-      )}
 
       <Section title="정보">
         <dl className="space-y-2 text-[13px]">

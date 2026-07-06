@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 
 export default function MemoEditor({ paperId }: { paperId: string }) {
+  const { requirePersonal } = usePersonalMode();
   const { get, setMemo } = useUserData();
   const [value, setValue] = useState(() => get(paperId).memo ?? '');
   const [saved, setSaved] = useState(false);
@@ -52,6 +54,10 @@ export default function MemoEditor({ paperId }: { paperId: string }) {
       <textarea
         ref={ref}
         value={value}
+        onFocus={(e) => {
+          // 잠금 상태에서는 입력 대신 안내 팝업 (docs/01 §10)
+          if (!requirePersonal()) e.target.blur();
+        }}
         onChange={(e) => setValue(e.target.value)}
         onBlur={save}
         rows={2}

@@ -28,7 +28,7 @@ function InfoRow({ label, children }: { label: string; children: React.ReactNode
 export default function PaperPage() {
   const { id } = useParams();
   const paper = id ? PAPER_BY_ID.get(id) : undefined;
-  const { personal } = usePersonalMode();
+  const { requirePersonal } = usePersonalMode();
   const { get, toggleVisited, toggleStarred } = useUserData();
 
   useEffect(() => {
@@ -116,10 +116,9 @@ export default function PaperPage() {
         </div>
       </div>
 
-      {personal && (
       <div className="grid grid-cols-2 gap-2">
         <button
-          onClick={() => toggleVisited(paper.id)}
+          onClick={() => requirePersonal() && toggleVisited(paper.id)}
           className={`flex h-12 items-center justify-center gap-2 rounded-[10px] border text-[14px] font-semibold transition-colors duration-150 ${
             get(paper.id).visited
               ? 'border-accent bg-accent text-white dark:border-accent-dark dark:bg-accent-dark dark:text-zinc-900'
@@ -130,7 +129,7 @@ export default function PaperPage() {
           {get(paper.id).visited ? '방문 완료' : '방문 체크'}
         </button>
         <button
-          onClick={() => toggleStarred(paper.id)}
+          onClick={() => requirePersonal() && toggleStarred(paper.id)}
           className={`flex h-12 items-center justify-center gap-2 rounded-[10px] border text-[14px] font-semibold transition-colors duration-150 ${
             get(paper.id).starred
               ? 'border-tier-reference/40 bg-tier-reference/10 text-tier-reference dark:border-tier-reference-dark/40 dark:bg-tier-reference-dark/10 dark:text-tier-reference-dark'
@@ -141,9 +140,8 @@ export default function PaperPage() {
           {get(paper.id).starred ? '별표 됨' : '별표'}
         </button>
       </div>
-      )}
 
-      {personal && <MemoEditor paperId={paper.id} />}
+      <MemoEditor paperId={paper.id} />
 
       <div className="grid grid-cols-2 gap-2 pb-2">
         <a

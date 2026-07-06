@@ -1,4 +1,3 @@
-import { usePersonalMode } from '../hooks/usePersonalMode';
 import { useUserData } from '../hooks/useUserData';
 import type { Session } from '../data/sessions';
 import type { Paper } from '../types';
@@ -12,7 +11,6 @@ export default function SessionGroup({
   session: Session;
   papers: Paper[];
 }) {
-  const { personal } = usePersonalMode();
   const { get } = useUserData();
   if (papers.length === 0) return null;
   const visited = papers.filter((p) => get(p.id).visited).length;
@@ -27,14 +25,12 @@ export default function SessionGroup({
           </span>
         </h2>
         <span className="shrink-0 text-[12px] tabular-nums text-zinc-400">
-          {personal ? `${visited}/${papers.length}` : `${papers.length}편`}
+          {visited}/{papers.length}
         </span>
       </header>
-      {personal && (
-        <div className="mb-2 px-1">
-          <ProgressBar value={papers.length ? visited / papers.length : 0} />
-        </div>
-      )}
+      <div className="mb-2 px-1">
+        <ProgressBar value={papers.length ? visited / papers.length : 0} />
+      </div>
       <div className="flex flex-col gap-2">
         {papers.map((p) => (
           <PosterCard key={p.id} paper={p} />
