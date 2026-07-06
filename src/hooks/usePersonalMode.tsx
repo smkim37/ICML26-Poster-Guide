@@ -15,7 +15,7 @@ import { clearPersonal, loadPersonalUntil, savePersonalUntil } from '../lib/stor
 // 강력한 보안 아님 — 코드에는 비밀번호의 SHA-256 hex만 둔다. 비밀번호 변경 시 이 상수 교체:
 //   node -e "crypto.subtle.digest('SHA-256', new TextEncoder().encode('새비번')).then(b=>console.log([...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')))"
 const PW_HASH = '318aee3fed8c9d040d35a7fc1fa776fb31303833aa2de885354ddf3d44d8fb69';
-export const PERSONAL_TTL_MS = 10 * 60 * 1000; // 해제 유지 10분
+export const PERSONAL_TTL_MS = 3 * 60 * 60 * 1000; // 해제 유지 3시간
 
 interface PersonalModeCtx {
   personal: boolean;

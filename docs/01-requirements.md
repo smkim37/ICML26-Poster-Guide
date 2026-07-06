@@ -95,7 +95,7 @@
 
 - 해제: 설정 → "개인 모드" 섹션에 비밀번호 입력 → SHA-256 해시 비교
   (`src/hooks/usePersonalMode.tsx`의 `PW_HASH` — 평문은 코드에 없음)
-- 유지: 해제 후 **10분** (`PERSONAL_TTL_MS`), `icml26.personal.v1`에 만료시각 저장.
+- 유지: 해제 후 **3시간** (`PERSONAL_TTL_MS`), `icml26.personal.v1`에 만료시각 저장.
   만료 시 자동 잠금(타이머 + visibilitychange 재검사), 설정에서 수동 "잠금" 가능
 - 잠금/만료돼도 userdata는 삭제되지 않음 — 액션만 막힐 뿐, 재해제 시 그대로
 - 게이트 진입점은 `usePersonalMode().requirePersonal()` 하나 — 개인화 액션 핸들러
